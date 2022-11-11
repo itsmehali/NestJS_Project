@@ -1,5 +1,5 @@
-import { CreateUserDto } from './dto/create-user.dto';
-import { UsersService } from './users.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
@@ -24,7 +24,7 @@ export class AuthenticationService {
     }
   }
 
-  async login(email: string, plainTextPassword: string) {
+  async validateUser(email: string, plainTextPassword: string) {
     try {
       const user = await this.usersService.getByEmail(email);
 

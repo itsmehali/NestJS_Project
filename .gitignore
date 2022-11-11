@@ -4,7 +4,8 @@
 
 .env
 .docker.env
-
+.gitignore
+.prettierc
 
 # Logs
 logs
