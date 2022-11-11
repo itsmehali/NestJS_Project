@@ -9,6 +9,7 @@ import { PostsModule } from './posts/posts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './posts/entities/post.entity';
 import { User } from './users/entitites/user.entity';
+import { AuthenticationModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { User } from './users/entitites/user.entity';
     DatabaseModule,
     UsersModule,
     PostsModule,
+    AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

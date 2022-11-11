@@ -1,6 +1,7 @@
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
+//import PostgresErrorCode from '../database/postgresErrorCodes.enum';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -12,20 +13,26 @@ export class AuthenticationService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(registrationData: CreateUserDto) {
-    const hashedPassword = await bcrypt.hash(registrationData.password, 10);
+  async register(createUserDto: CreateUserDto) {
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
     try {
       const createdUser = await this.usersService.create({
-        ...registrationData,
+        ...createUserDto,
         password: hashedPassword,
       });
-      createdUser.password = undefined;
+      console.log('createdUser', createdUser);
+
+      //createdUser.password = undefined;
       return createdUser;
     } catch (error) {
-      if (error?.code === PostgresErrorCode.UniqueViolation) {
-        throw new HttpException('User with that email already exists', HttpStatus.BAD_REQUEST);
-      }
+      // if (error?.code === PostgresErrorCode.UniqueViolation) {
+      //   throw new HttpException('User with that email already exists', HttpStatus.BAD_REQUEST);
+      // }
+      console.log(createUserDto);
+
+      console.log(error);
+
       throw new HttpException('Something went wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

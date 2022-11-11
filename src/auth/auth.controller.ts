@@ -12,6 +12,8 @@ export class AuthenticationController {
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
+    console.log('asd', createUserDto);
+
     return this.authenticationService.register(createUserDto);
   }
 
@@ -22,7 +24,7 @@ export class AuthenticationController {
     const { user } = request;
     const cookie = this.authenticationService.getCookieWithJwtToken(user.id);
     response.setHeader('Set-Cookie', cookie);
-    user.password = undefined;
+    //user.password = undefined;
     return response.send(user);
   }
 
@@ -37,7 +39,7 @@ export class AuthenticationController {
   @Get()
   authenticate(@Req() request: RequestWithUser) {
     const user = request.user;
-    user.password = undefined;
+    //user.password = undefined;
     return user;
   }
 }
