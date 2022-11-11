@@ -58,4 +58,8 @@ export class AuthenticationService {
       'JWT_EXPIRATION_TIME',
     )}`;
   }
+
+  getCookieForLogOut() {
+    return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+  }
 }
