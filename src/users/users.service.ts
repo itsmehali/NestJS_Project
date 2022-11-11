@@ -6,18 +6,20 @@ import { User } from './entitites/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
-  ) {}
+  constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
+
+  async getById(id: number) {
+    const user = this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
+    }
+  }
 
   async getByEmail(email: string) {
     const user = await this.usersRepository.findOne({ where: { email } });
 
     if (!user) {
-      throw new HttpException(
-        'User with this email does not exist',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
     }
 
     return user;

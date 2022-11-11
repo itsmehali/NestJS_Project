@@ -2,9 +2,15 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 export class AuthenticationService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async register(registrationData: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(registrationData.password, 10);
@@ -43,5 +49,13 @@ export class AuthenticationService {
     if (!isPasswordMatching) {
       throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
     }
+  }
+
+  getCookieWithJwtToken(userId: number) {
+    const payload: TokenPayload = { userId };
+    const token = this.jwtService.sign(payload);
+    return `Authentication=${token}; HttpOnly; Path=\; Max-Age=${this.configService.get(
+      'JWT_EXPIRATION_TIME',
+    )}`;
   }
 }

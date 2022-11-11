@@ -13,6 +13,10 @@ import { User } from './users/entitites/user.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      validationSchema: Joi.object({
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRATION_TIME: Joi.string().required(),
+      }),
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
